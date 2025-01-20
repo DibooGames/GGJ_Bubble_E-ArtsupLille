@@ -1,161 +1,115 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody), typeof(PlayerInput))]
+
 public class BulleMovement : MonoBehaviour
 {
     //--- Actions depuis le nouvel Input System ---
     private InputActionMap playerActionMap;
-    private InputAction accelDecelAction;   // -1, 0, +1
-    private InputAction floatAction;        // bool (button)
-    private InputAction viewAction;         // Vector2 pour la souris / stick
+    private InputAction moveAction;
+    private InputAction viewAction;
+    private InputAction floatAction;
 
-    //--- Contrôle de la bulle ---
-    [Header("Paramètres de déplacement")]
-    [Tooltip("Facteur d'accélération quand l'input est ±1.")]
-    public float acceleration = 5f;
-    
-    [Tooltip("Vitesse maximale le long de l'axe Y local.")]
-    public float maxSpeed = 10f;
-    
-    [Tooltip("Décélération quand l'input revient à 0.")]
-    public float deceleration = 5f;
+    //--- Variables de mouvement ---
+    [Header("Mouvement de la bulle")]
+    public float speed = 5f;       // Vitesse de déplacement horizontal
+    public float floatForce = 5f;  // Force vers le haut en maintenant Espace
 
-    [Tooltip("Force supplémentaire appliquée en haut quand 'Float' est maintenu (ex: Espace).")]
-    public float floatForce = 5f;
+    //--- Variables de rotation de la caméra ---
+    [Header("Rotation caméra")]
+    public float mouseSensitivity = 100f;   // Sensibilité de la souris
+    public float maxVerticalAngle = 80f;    // Limite d'angle vertical (en degrés)
 
-    //--- Contrôle de la caméra ---
-    [Header("Paramètres de caméra")]
-    [Tooltip("Pivot ou GameObject à faire pivoter pour la caméra (parent de la Camera).")]
+    // Pivot ou objet caméra enfant (pour gérer le pitch)
+    // Assignez-le depuis l’inspecteur (par ex. la Main Camera en enfant).
     public Transform cameraPivot;
 
-    [Tooltip("Sensibilité de rotation de la caméra (°/sec par unité d'input).")]
-    public float cameraSensitivity = 180f;
-
-    [Tooltip("Limite (en degrés) de l'angle de pitch (haut/bas).")]
-    public float pitchClamp = 80f;
-
-    //--- États internes ---
+    //--- Interne ---
     private Rigidbody rb;
-    private float accelInput = 0f;         // Valeur brute de "Acceleration/decceleration"
-    private float currentSpeed = 0f;       // Vitesse actuelle le long de Y local
-    private bool isFloatPressed = false;   // Est-ce qu'on maintient la touche Float ?
+    private float pitch = 0f;   // Stockage de l'angle vertical
 
-    // Variables pour la rotation de caméra
-    private float cameraPitch = 0f; // rotation autour de X
-    private float cameraYaw = 0f;   // rotation autour de Y
-
-    private void Start()
+    private void Awake()
     {
-        // 1) Récupération de l'Action Map "Player"
+        // Récupération du Rigidbody (gravité activée dans l’Inspector)
+        rb = GetComponentInChildren<Rigidbody>();
+        
+        // Récupération du PlayerInput et des actions
         var playerInput = GetComponent<PlayerInput>();
         playerActionMap = playerInput.actions.FindActionMap("Player");
-        if (playerActionMap == null)
-        {
-            Debug.LogError("Impossible de trouver l'Action Map 'Player'.");
-            return;
-        }
 
-        // 2) Récupérer les différentes actions
-        accelDecelAction = playerActionMap.FindAction("Acceleration/decceleration");
-        floatAction      = playerActionMap.FindAction("Float");
-        viewAction       = playerActionMap.FindAction("View");
+        moveAction   = playerActionMap.FindAction("Move");
+        viewAction   = playerActionMap.FindAction("View");
+        floatAction  = playerActionMap.FindAction("Float");
+    }
 
-        if (accelDecelAction == null) Debug.LogError("'Acceleration/decceleration' introuvable.");
-        if (floatAction == null)      Debug.LogError("'Float' introuvable.");
-        if (viewAction == null)       Debug.LogError("'View' introuvable.");
+    private void OnEnable()
+    {
+        // Activation des actions
+        moveAction.Enable();
+        viewAction.Enable();
+        floatAction.Enable();
+    }
 
-        // 3) Souscrire aux événements
-        if (accelDecelAction != null)
-        {
-            accelDecelAction.performed += ctx => { accelInput = ctx.ReadValue<float>(); };
-            accelDecelAction.canceled  += ctx => { accelInput = 0f; };
-        }
-
-        if (floatAction != null)
-        {
-            floatAction.performed += ctx => { isFloatPressed = true; };
-            floatAction.canceled  += ctx => { isFloatPressed = false; };
-        }
-
-        // Pas d'événements spécifiques pour viewAction : on fera un ReadValue dans Update()
-
-        // 4) Configuration du Rigidbody
-        rb = GetComponent<Rigidbody>();
-        // On NE désactive PAS la gravité => rb.useGravity = true par défaut
-
-        // 5) Si aucun pivot caméra n'a été assigné, on prend ce transform
-        if (cameraPivot == null)
-        {
-            cameraPivot = this.transform;
-        }
+    private void OnDisable()
+    {
+        // Désactivation des actions
+        moveAction.Disable();
+        viewAction.Disable();
+        floatAction.Disable();
     }
 
     private void Update()
     {
-        // --- A) Contrôle de la caméra ---
-        if (viewAction != null)
+        // =============================================================
+        // 1) Gérer la rotation de la caméra (yaw + pitch) dans Update
+        // =============================================================
+        Vector2 viewInput = viewAction.ReadValue<Vector2>();
+
+        // Rotation horizontale (yaw) : faire pivoter tout l'objet
+        float yaw = viewInput.x * mouseSensitivity * Time.deltaTime;
+        transform.Rotate(Vector3.up, yaw);
+
+        // Rotation verticale (pitch) : uniquement sur le pivot caméra
+        float pitchDelta = -viewInput.y * mouseSensitivity * Time.deltaTime;
+        pitch += pitchDelta;
+        pitch = Mathf.Clamp(pitch, -maxVerticalAngle, maxVerticalAngle);
+
+        if (cameraPivot != null)
         {
-            // Lire la valeur du "View" (Vector2) : delta souris / stick
-            Vector2 viewDelta = viewAction.ReadValue<Vector2>();
-
-            // On calcule l'angle à ajouter, en tenant compte de la sensibilité et du deltaTime
-            float mouseX = viewDelta.x * (cameraSensitivity * 0.50f) * Time.deltaTime;
-            float mouseY = viewDelta.y * (cameraSensitivity * 0.50f) * Time.deltaTime;
-
-            // Mettre à jour le yaw/pitch
-            cameraYaw   += mouseX;
-            cameraPitch -= mouseY; // le "-" fait que la souris vers le haut => vise vers le haut
-            cameraPitch  = Mathf.Clamp(cameraPitch, -pitchClamp, pitchClamp);
-
-            // Appliquer la rotation au pivot (pitch autour de X, yaw autour de Y)
-            cameraPivot.localRotation = Quaternion.Euler(cameraPitch, cameraYaw, 0f);
+            cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
         }
     }
 
     private void FixedUpdate()
     {
-        // --- B) Calcul de la vitesse le long de l'axe Y local de la bulle ---
-        if (!Mathf.Approximately(accelInput, 0f))
+        // =============================================================
+        // 2) Gérer le déplacement physique dans FixedUpdate (Rigidbody)
+        // =============================================================
+
+        // Récupération des axes de déplacement (ZQSD/WASD) en 2D
+        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+
+        // On construit la direction voulue en se basant sur l'orientation actuelle
+        // de l'objet (transform) : forward et right. 
+        // On ignore la composante verticale pour le déplacement horizontal.
+        Vector3 desiredDirection = transform.forward * moveInput.y + transform.right * moveInput.x;
+        desiredDirection.y = 0f; // Empêcher la bulle de pencher vers le haut/bas sur ZQSD
+
+        // On applique la vitesse en X et Z, tout en conservant la vitesse verticale
+        Vector3 currentVelocity = rb.velocity;
+        Vector3 horizontalVelocity = desiredDirection * speed;
+        Vector3 newVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
+
+        rb.velocity = newVelocity;
+
+        // Si la touche "Float" (Espace) est pressée, on applique une force vers le haut
+        if (floatAction.IsPressed())
         {
-            // On accélère ou recule suivant le signe de accelInput
-            currentSpeed += accelInput * acceleration * Time.fixedDeltaTime;
-            // Borne la vitesse
-            currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
-        }
-        else
-        {
-            // Décélération quand on n'appuie plus
-            if (currentSpeed > 0f)
-            {
-                currentSpeed -= deceleration * Time.fixedDeltaTime;
-                if (currentSpeed < 0f) currentSpeed = 0f;
-            }
-            else if (currentSpeed < 0f)
-            {
-                currentSpeed += deceleration * Time.fixedDeltaTime;
-                if (currentSpeed > 0f) currentSpeed = 0f;
-            }
+            // On applique une force continue vers le haut
+            rb.AddForce(Vector3.up * floatForce, ForceMode.Force);
         }
 
-        // --- C) Construire la velocity dans l'espace monde ---
-        // Le "forward" de la bulle est son axe Y local => transform.up
-        // Donc on bouge sur XZ selon (transform.up * currentSpeed),
-        // mais on conserve la composante verticale (y) due à la gravité.
-        Vector3 localYMovement = transform.up * currentSpeed;
-        float yVelocity = rb.velocity.y; // conserver la vitesse verticale (gravité)
-
-        // Velocity finale
-        Vector3 finalVelocity = new Vector3(localYMovement.x, yVelocity, localYMovement.z);
-        rb.velocity = finalVelocity;
-
-        // --- D) Gérer la touche "Float" ---
-        // Quand on maintient Float (ex: Espace), on applique une force vers le haut
-        if (isFloatPressed)
-        {
-            // On applique une force "vers le haut" pour contrer (partiellement ou totalement) la gravité
-            // ForceMode.Acceleration => force indépendante de la masse
-            rb.AddForce(Vector3.up * floatForce, ForceMode.Acceleration);
-        }
+        // La gravité Unity s’occupe de faire retomber la bulle naturellement 
+        // (Rigidbody.useGravity = true dans l’Inspector).
     }
 }

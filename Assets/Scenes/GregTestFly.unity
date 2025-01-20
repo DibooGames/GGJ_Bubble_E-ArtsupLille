@@ -2988,14 +2988,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1160fef7451884b48a32d5250a792d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  accelerationRate: 5
-  maxSpeed: 30
-  accelSmoothing: 5
-  dragWhenNoInput: 1
-  cameraSensitivity: 40
-  pitchClamp: 80
+  speed: 10
+  floatForce: 5
+  mouseSensitivity: 100
+  maxVerticalAngle: 80
   cameraPivot: {fileID: 0}
-  verticalInfluence: 0.3
 --- !u!114 &1880560851
 MonoBehaviour:
   m_ObjectHideFlags: 0
