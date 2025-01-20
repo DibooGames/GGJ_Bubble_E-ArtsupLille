@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "BubbleSimulator.sln"
+    "dotnet.defaultSolution": "GGJ_Bubble_E-ArtsupLille.sln"
 }
