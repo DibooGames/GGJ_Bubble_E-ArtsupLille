@@ -1,115 +1,61 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-
-public class BulleMovement : MonoBehaviour
+[RequireComponent(typeof(Rigidbody))]
+public class FlyMovement : MonoBehaviour
 {
-    //--- Actions depuis le nouvel Input System ---
-    private InputActionMap playerActionMap;
-    private InputAction moveAction;
-    private InputAction viewAction;
-    private InputAction floatAction;
-
-    //--- Variables de mouvement ---
-    [Header("Mouvement de la bulle")]
-    public float speed = 5f;       // Vitesse de déplacement horizontal
-    public float floatForce = 5f;  // Force vers le haut en maintenant Espace
-
-    //--- Variables de rotation de la caméra ---
-    [Header("Rotation caméra")]
-    public float mouseSensitivity = 100f;   // Sensibilité de la souris
-    public float maxVerticalAngle = 80f;    // Limite d'angle vertical (en degrés)
-
-    // Pivot ou objet caméra enfant (pour gérer le pitch)
-    // Assignez-le depuis l’inspecteur (par ex. la Main Camera en enfant).
-    public Transform cameraPivot;
-
-    //--- Interne ---
+    [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float ascendSpeed = 3f;
+    
+    private Vector2 moveInput;
+    private bool isAscending;
     private Rigidbody rb;
-    private float pitch = 0f;   // Stockage de l'angle vertical
+   [SerializeField] private Transform cameraTransform;
 
     private void Awake()
     {
-        // Récupération du Rigidbody (gravité activée dans l’Inspector)
-        rb = GetComponentInChildren<Rigidbody>();
-        
-        // Récupération du PlayerInput et des actions
-        var playerInput = GetComponent<PlayerInput>();
-        playerActionMap = playerInput.actions.FindActionMap("Player");
-
-        moveAction   = playerActionMap.FindAction("Move");
-        viewAction   = playerActionMap.FindAction("View");
-        floatAction  = playerActionMap.FindAction("Float");
+        rb = GetComponent<Rigidbody>();
+         // Assume the main camera is the player’s camera
     }
 
-    private void OnEnable()
+    public void SetCameraTransform(Transform camTransform)
     {
-        // Activation des actions
-        moveAction.Enable();
-        viewAction.Enable();
-        floatAction.Enable();
+        cameraTransform = camTransform;
     }
 
-    private void OnDisable()
+    public void OnMove(InputAction.CallbackContext context)
     {
-        // Désactivation des actions
-        moveAction.Disable();
-        viewAction.Disable();
-        floatAction.Disable();
+        moveInput = context.ReadValue<Vector2>();
+        Debug.Log($"Move Input: {moveInput}");
     }
 
-    private void Update()
+    public void OnAscend(InputAction.CallbackContext context)
     {
-        // =============================================================
-        // 1) Gérer la rotation de la caméra (yaw + pitch) dans Update
-        // =============================================================
-        Vector2 viewInput = viewAction.ReadValue<Vector2>();
-
-        // Rotation horizontale (yaw) : faire pivoter tout l'objet
-        float yaw = viewInput.x * mouseSensitivity * Time.deltaTime;
-        transform.Rotate(Vector3.up, yaw);
-
-        // Rotation verticale (pitch) : uniquement sur le pivot caméra
-        float pitchDelta = -viewInput.y * mouseSensitivity * Time.deltaTime;
-        pitch += pitchDelta;
-        pitch = Mathf.Clamp(pitch, -maxVerticalAngle, maxVerticalAngle);
-
-        if (cameraPivot != null)
-        {
-            cameraPivot.localEulerAngles = new Vector3(pitch, 0f, 0f);
-        }
+        isAscending = context.ReadValueAsButton();
+        Debug.Log($"Is Ascending: {isAscending}");
     }
 
     private void FixedUpdate()
     {
-        // =============================================================
-        // 2) Gérer le déplacement physique dans FixedUpdate (Rigidbody)
-        // =============================================================
+        // Ignore the camera’s vertical tilt by flattening its forward vector
+        Vector3 flatForward = cameraTransform.forward;
+        flatForward.y = 0;
+        flatForward.Normalize();
 
-        // Récupération des axes de déplacement (ZQSD/WASD) en 2D
-        Vector2 moveInput = moveAction.ReadValue<Vector2>();
+        // Compute the move direction in the horizontal plane
+        Vector3 moveDirection = flatForward * moveInput.y + cameraTransform.right * moveInput.x;
 
-        // On construit la direction voulue en se basant sur l'orientation actuelle
-        // de l'objet (transform) : forward et right. 
-        // On ignore la composante verticale pour le déplacement horizontal.
-        Vector3 desiredDirection = transform.forward * moveInput.y + transform.right * moveInput.x;
-        desiredDirection.y = 0f; // Empêcher la bulle de pencher vers le haut/bas sur ZQSD
-
-        // On applique la vitesse en X et Z, tout en conservant la vitesse verticale
-        Vector3 currentVelocity = rb.velocity;
-        Vector3 horizontalVelocity = desiredDirection * speed;
-        Vector3 newVelocity = new Vector3(horizontalVelocity.x, currentVelocity.y, horizontalVelocity.z);
-
-        rb.velocity = newVelocity;
-
-        // Si la touche "Float" (Espace) est pressée, on applique une force vers le haut
-        if (floatAction.IsPressed())
+        // Apply movement
+        Vector3 newVelocity = moveDirection * moveSpeed;
+        if (isAscending)
         {
-            // On applique une force continue vers le haut
-            rb.AddForce(Vector3.up * floatForce, ForceMode.Force);
+            newVelocity.y = ascendSpeed;
+        }
+        else
+        {
+            newVelocity.y = rb.velocity.y; // Keep the current vertical velocity
         }
 
-        // La gravité Unity s’occupe de faire retomber la bulle naturellement 
-        // (Rigidbody.useGravity = true dans l’Inspector).
+        rb.velocity = newVelocity;
     }
 }
