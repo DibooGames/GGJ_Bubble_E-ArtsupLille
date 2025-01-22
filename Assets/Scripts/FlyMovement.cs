@@ -26,7 +26,6 @@ public class FlyMovement : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        Debug.Log($"Move Input: {moveInput}");
     }
 
     public void OnAscend(InputAction.CallbackContext context)
@@ -55,7 +54,6 @@ public class FlyMovement : MonoBehaviour
         {
             newVelocity.y = rb.velocity.y; // Keep the current vertical velocity
         }
-
         rb.velocity = newVelocity;
     }
 }

@@ -13,15 +13,12 @@ public class CameraController : MonoBehaviour
     private float pitch;
 
     public void OnLook(InputAction.CallbackContext context)
-    { 
-        Debug.Log("blablou");
+    {
         lookInput = context.ReadValue<Vector2>();
-        Debug.Log($"Look Input: {lookInput}");
     }
 
-    private void Start()
+    private void Start()    
     {
-        
         yaw = transform.eulerAngles.y;
         pitch = transform.eulerAngles.x;
     }
@@ -32,6 +29,8 @@ public class CameraController : MonoBehaviour
         yaw += lookInput.x * sensitivity;
         pitch -= lookInput.y * sensitivity;
         pitch = Mathf.Clamp(pitch, minY, maxY);
+
+        Debug.Log($"Yaw: {yaw}, Pitch: {pitch}");
 
         // Apply rotation
         transform.eulerAngles = new Vector3(pitch, yaw, 0f);
