@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8288212600278137821}
+  - component: {fileID: 4384072616177634526}
   m_Layer: 0
   m_Name: Sol
   m_TagString: Untagged
@@ -32,6 +33,27 @@ Transform:
   - {fileID: 9107446875625071256}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &4384072616177634526
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 842338008003874379}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9991051, y: 0.5002819, z: 2.0047197}
+  m_Center: {x: -0.0042640567, y: -0.24985906, z: -0.0014312267}
 --- !u!1001 &8786135653359469939
 PrefabInstance:
   m_ObjectHideFlags: 0
