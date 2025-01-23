@@ -47,7 +47,7 @@ public partial class @BulleInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Look"",
-                    ""type"": ""Value"",
+                    ""type"": ""PassThrough"",
                     ""id"": ""ffec2a26-6199-4dac-9bbd-5c5a6f335196"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
