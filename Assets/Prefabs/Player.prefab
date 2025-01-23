@@ -156,8 +156,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1160fef7451884b48a32d5250a792d44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  ascendSpeed: 3
+  moveSpeed: 108.8
+  ascendSpeed: 55.09
+  acceleration: 151.4
   cameraTransform: {fileID: 0}
 --- !u!54 &6945218976655434845
 Rigidbody:
@@ -167,7 +168,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5369892425764175517}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.31
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
