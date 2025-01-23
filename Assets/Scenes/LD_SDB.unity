@@ -15,11 +15,11 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 0.9017889, g: 0.98971367, b: 0.990566, a: 1}
-  m_FogMode: 2
+  m_FogColor: {r: 1, g: 0.96595573, b: 0.6084906, a: 1}
+  m_FogMode: 1
   m_FogDensity: 0.005
-  m_LinearFogStart: 11.94
-  m_LinearFogEnd: 200.83
+  m_LinearFogStart: 76
+  m_LinearFogEnd: 282.5
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
@@ -5690,6 +5690,55 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 681028932}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &864210359
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 864210361}
+  - component: {fileID: 864210360}
+  m_Layer: 0
+  m_Name: Global Volume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &864210360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864210359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 35facd8458d493f499a193976ddfe483, type: 2}
+--- !u!4 &864210361
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864210359}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -32.41644, y: 2.9840195, z: 32.621326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &867332545
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8953,7 +9002,7 @@ PrefabInstance:
     - target: {fileID: 352108599506229049, guid: d2d4f07a03e61cf4ba4b8a94520c8091,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -67.01137
+      value: -66.98945
       objectReference: {fileID: 0}
     - target: {fileID: 352108599506229049, guid: d2d4f07a03e61cf4ba4b8a94520c8091,
         type: 3}
@@ -9043,7 +9092,7 @@ PrefabInstance:
     - target: {fileID: 6978939016918874358, guid: d2d4f07a03e61cf4ba4b8a94520c8091,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -67.01137
+      value: -66.98945
       objectReference: {fileID: 0}
     - target: {fileID: 6978939016918874358, guid: d2d4f07a03e61cf4ba4b8a94520c8091,
         type: 3}
@@ -14238,6 +14287,7 @@ MeshCollider:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 864210361}
   - {fileID: 410087041}
   - {fileID: 692825294}
   - {fileID: 1647104611}
