@@ -508,4 +508,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sensitivity: 150
-  VirtualCamera: {fileID: 0}
+  VirtualCamera: {fileID: 3168726720655416174}
