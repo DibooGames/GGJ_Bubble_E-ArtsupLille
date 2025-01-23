@@ -2936,6 +2936,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dialogue Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 6147295196364681661, guid: 944e649641b91ad4580ba36b192a6c6c,
+        type: 3}
+      propertyPath: initialDatabase
+      value: 
+      objectReference: {fileID: 11400000, guid: 3fbb368a7f8c84b47807c892316ff8da,
+        type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3331,6 +3337,11 @@ PrefabInstance:
       propertyPath: Player
       value: 
       objectReference: {fileID: 1880560848}
+    - target: {fileID: 3606324532043479744, guid: 0b5a2118f1b48f04d9e15d6683feb299,
+        type: 3}
+      propertyPath: upwardForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6574323451317484986, guid: 0b5a2118f1b48f04d9e15d6683feb299,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3459,6 +3470,11 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 1234016961}
+    - target: {fileID: 6945218976655434845, guid: 0566b57138c38c94d9da8202d212871f,
+        type: 3}
+      propertyPath: m_Mass
+      value: 0.31
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
