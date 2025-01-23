@@ -6,16 +6,17 @@ public class FlyMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float ascendSpeed = 3f;
-    
+    [SerializeField] private float acceleration = 10f;
+    [SerializeField] private Transform cameraTransform;
+
     private Vector2 moveInput;
     private bool isAscending;
     private Rigidbody rb;
-   [SerializeField] private Transform cameraTransform;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-         // Assume the main camera is the player’s camera
+        GameManager.instance.isInDryArea = false;
     }
 
     public void SetCameraTransform(Transform camTransform)
@@ -31,29 +32,35 @@ public class FlyMovement : MonoBehaviour
     public void OnAscend(InputAction.CallbackContext context)
     {
         isAscending = context.ReadValueAsButton();
-        Debug.Log($"Is Ascending: {isAscending}");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("dry"))
+        {
+            GameManager.instance.isInDryArea = true;
+            GameManager.instance.UpdateIntegrity();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("dry"))
+        {
+            GameManager.instance.isInDryArea = false;
+        }
     }
 
     private void FixedUpdate()
     {
-        // Ignore the camera’s vertical tilt by flattening its forward vector
         Vector3 flatForward = cameraTransform.forward;
         flatForward.y = 0;
         flatForward.Normalize();
 
-        // Compute the move direction in the horizontal plane
         Vector3 moveDirection = flatForward * moveInput.y + cameraTransform.right * moveInput.x;
+        Vector3 targetVelocity = moveDirection * moveSpeed;
+        targetVelocity.y = isAscending ? ascendSpeed : rb.velocity.y;
 
-        // Apply movement
-        Vector3 newVelocity = moveDirection * moveSpeed;
-        if (isAscending)
-        {
-            newVelocity.y = ascendSpeed;
-        }
-        else
-        {
-            newVelocity.y = rb.velocity.y; // Keep the current vertical velocity
-        }
-        rb.velocity = newVelocity;
+        rb.velocity = Vector3.MoveTowards(rb.velocity, targetVelocity, acceleration * Time.fixedDeltaTime);
     }
 }

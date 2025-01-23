@@ -141,6 +141,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b304869eb2cfd9b45aef93100eff4bad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upwardForce: 10
+  upwardForce: 0.1
   boxCollider: {fileID: 7934093063075646842}
-  Player: {fileID: 0}
+  Player: {fileID: 5369892425764175517, guid: 0566b57138c38c94d9da8202d212871f, type: 3}
