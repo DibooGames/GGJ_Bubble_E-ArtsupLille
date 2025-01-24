@@ -11,11 +11,8 @@ public class GameManager : MonoBehaviour
   
     public static GameManager instance;
 
-    public GameObject player;
-    public GameObject Camera;
-    public SensitivityController sensitivityController;
-    public FlyMovement flyMovement;
-    public PlayerInput playerInput;
+    public bool IsInGame;
+    public bool IsGamePaused;
 
 
 
@@ -27,6 +24,9 @@ public class GameManager : MonoBehaviour
     public bool isInDryArea = false;
     
     public UnityEvent OnLose;
+    public UnityEvent OnPause;
+    public UnityEvent OnWin;
+    
 
 
 
@@ -78,7 +78,16 @@ public class GameManager : MonoBehaviour
         }
 
 
-
+        if(IsGamePaused)
+        {
+            Time.timeScale = 0;
+        }
+        else
+        {
+            Time.timeScale = 1;
+        }
+        
+        
     }
 
     public void ReloadStats()
@@ -106,6 +115,25 @@ public class GameManager : MonoBehaviour
         {
             BubbleIntegrity = BubbleIntegrityMax;
         }
+    }
+
+    public void PauseGame()
+    {
+        IsGamePaused = true;
+        OnPause?.Invoke();
+        
+    }
+
+    public void ResumeGame()
+    {
+        IsGamePaused = false;
+    }
+
+    public void WinGame()
+    {
+        Debug.Log("You Win!");
+        OnWin?.Invoke();
+
     }
 
 }
