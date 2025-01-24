@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 935899b62f48ae5498594680ed17d133, type: 3}
-  m_Name: Dialogue Database
+  m_Name: Dialogue Database (Auto-Backup)
   m_EditorClassIdentifier: 
   version: 1
   author: moi
@@ -688,7 +688,7 @@ MonoBehaviour:
       - title: Dialogue Text
         value: Hello, my daughter, welcome to the Path of Ascension. At the summit,
           you may attempt to fly to the Iron Gates and leave this world for a better
-          one, use the fan to get there
+          one
         type: 0
         typeString: 
       - title: Sequence
