@@ -330,7 +330,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: plic
+        value: Thanks Grandpa ! wait me here my journey won't take long but i'll
+          have a lot to tell for sure!
         type: 0
         typeString: 
       - title: Sequence
@@ -352,7 +353,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 147.20001
+        x: 146.22441
         y: 357.19998
         width: 160
         height: 30
@@ -379,7 +380,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: ploc
+        value: meh, see ya around pap :/
         type: 0
         typeString: 
       - title: Sequence
@@ -406,8 +407,8 @@ MonoBehaviour:
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 0.7000003
+    canvasScrollPosition: {x: 32.49909, y: 36.794426}
+    canvasZoom: 0.8200002
   syncInfo:
     syncActors: 0
     syncItems: 0

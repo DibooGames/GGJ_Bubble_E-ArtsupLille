@@ -15,6 +15,7 @@ public class SceneManager : MonoBehaviour
 
         GameManager = GameManager.instance;
     }
+    
 
 
     public void LoadMainMenu()

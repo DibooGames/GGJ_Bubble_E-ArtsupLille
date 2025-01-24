@@ -86,9 +86,32 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1;
         }
-        
-        
+
+
+      
+        if(Input.GetKey(KeyCode.Escape))
+        {
+            if(IsGamePaused)
+            {
+                ResumeGame();
+            }
+            else
+            {
+                PauseGame();
+            }
+
+        }
+
+
     }
+
+
+
+
+
+
+
+
 
     public void ReloadStats()
     {

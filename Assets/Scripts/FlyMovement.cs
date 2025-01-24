@@ -9,8 +9,6 @@ public class FlyMovement : MonoBehaviour
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private Transform cameraTransform;
 
-    [SerializeField] private BoxCollider WinBox;
-
     private Vector2 moveInput;
     private bool isAscending;
     private Rigidbody rb;
@@ -43,11 +41,6 @@ public class FlyMovement : MonoBehaviour
             GameManager.instance.isInDryArea = true;
             GameManager.instance.UpdateIntegrity();
         }
-
-        if(other.gameObject == WinBox.gameObject)
-        {
-            GameManager.instance.WinGame();
-        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -56,8 +49,6 @@ public class FlyMovement : MonoBehaviour
         {
             GameManager.instance.isInDryArea = false;
         }
-
-
     }
 
     private void FixedUpdate()

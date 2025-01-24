@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 7035382473906806332}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -24.159447, y: -14.060574, z: -18.487873}
+  m_LocalPosition: {x: -7.6894474, y: -61.336815, z: 3.792122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 80.52
+    m_MaxSpeed: 150
     m_AccelTime: 0.26
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -447,7 +447,7 @@ Transform:
   m_GameObject: {fileID: 8489664616410501690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.159447, y: -14.060574, z: -18.487873}
+  m_LocalPosition: {x: -7.6894474, y: -61.336815, z: 3.792122}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -500,7 +500,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8489664616410501690}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e501d18bb52cf8c40b1853ca4904654f, type: 3}
   m_Name: 
@@ -563,7 +563,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8489664616410501690}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2015bc79ba66bd4eb6af99b77c1d127, type: 3}
   m_Name: 

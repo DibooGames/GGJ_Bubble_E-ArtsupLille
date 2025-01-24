@@ -14,5 +14,15 @@ public class WinBox : MonoBehaviour
     void Update()
     {
         
+
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            GameManager.instance.WinGame();
+        }
     }
 }
